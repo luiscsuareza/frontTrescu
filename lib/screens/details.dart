@@ -27,7 +27,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   var dropdownValue;
   List<String> values = [];
   var dateTimeValue;
-
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -478,38 +478,105 @@ class _ProductDetailsState extends State<ProductDetails> {
 
             SizedBox(height: 10.0),
 
-            Card(
-              elevation: 3.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.0),
-                  ),
-                ),
-                child: DateTimePicker(
-                  type: DateTimePickerType.dateTimeSeparate,
-                  //yyyy-MM-dd'T'HH:mm:ss.SSSZ
-                  dateMask: 'yyyy-MM-dd',
-                  initialValue: DateTime.now().toString(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                  icon: Icon(Icons.event),
-                  dateLabelText: 'Fecha',
-                  timeLabelText: 'Hora',
-                  onChanged: (val) => {
-                    dateTimeValue = DateTime.parse(val),
-                    print(DateTime.parse(val)),
-                  },
-                  validator: (val) {
-                    dateTimeValue = DateTime.parse(val);
-                    print(DateTime.parse(val));
-                    return null;
-                  },
-                  onSaved: (val) => print(val),
+            CheckboxListTile(
+              title: Text(
+                "Programar Entrega:",
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w900,
+                  color: Theme.of(context).accentColor,
                 ),
               ),
+              checkColor: Colors.white,
+              value: isChecked,
+              onChanged: (bool value) {
+                setState(() {
+                  isChecked = value;
+                });
+              },
             ),
+
+            SizedBox(height: 10.0),
+
+            if (isChecked)
+              Card(
+                elevation: 3.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
+                    ),
+                  ),
+                  child: DateTimePicker(
+                    calendarTitle: 'Programar en:',
+                    type: DateTimePickerType.dateTime,
+                    //yyyy-MM-dd'T'HH:mm:ss.SSSZ
+                    dateMask: 'yyyy-MM-dd HH:00',
+                    initialValue:
+                        DateTime.now().add(const Duration(days: 1)).toString(),
+                    firstDate: DateTime.now().add(const Duration(days: 1)),
+                    lastDate: DateTime(2100),
+                    icon: Icon(Icons.event),
+                    dateLabelText: 'Fecha',
+                    timeLabelText: 'Hora',
+                    onChanged: (val) => {
+                      if (DateTime.parse(val).hour > 8 &&
+                          DateTime.parse(val).hour < 21)
+                        {
+                          dateTimeValue = DateTime.parse(val),
+                          //print(DateTime.parse(val)),
+                        }
+                      else
+                        {
+                          dateTimeValue =
+                              DateTime.now().add(const Duration(days: 1)),
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Hora Invalida'),
+                              content: const Text(
+                                  'Debe seleccionar entre 8 AM y 9 PM'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          )
+                        },
+                    },
+                    validator: (val) {
+                      if (DateTime.parse(val).hour > 8 &&
+                          DateTime.parse(val).hour < 21) {
+                        dateTimeValue = DateTime.parse(val);
+                        //print(DateTime.parse(val)),
+                      } else {
+                        dateTimeValue =
+                            DateTime.now().add(const Duration(days: 1));
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Hora Invalida'),
+                            content: const Text(
+                                'Debe seleccionar entre 8 AM y 9 PM'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      ;
+                      return null;
+                    },
+                    onSaved: (val) => print(val),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -524,11 +591,19 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
           color: Theme.of(context).accentColor,
           onPressed: () async {
-            if (int.parse(balance.replaceAll(",00", "").replaceAll(".", ""))>=int.parse(dropdownValue)){
-              await createTransaction(this.dropdownValue,
+            if (int.parse(balance.replaceAll(",00", "").replaceAll(".", "")) >=
+                int.parse(dropdownValue)) {
+              await createTransaction(
+                  this.dropdownValue,
                   "${brandsList[widget.index]['id']}",
-                  createReceiver(this.dateTimeValue.toString(), this._emailNameControl.text, this._fullNameControl.text, this._messageControl.text, this._phoneNameControl.text).toString(),
-                  "Compra en "+"${brandsList[widget.index]['brandName']}");
+                  createReceiver(
+                          this.dateTimeValue.toString(),
+                          this._emailNameControl.text,
+                          this._fullNameControl.text,
+                          this._messageControl.text,
+                          this._phoneNameControl.text)
+                      .toString(),
+                  "Compra en " + "${brandsList[widget.index]['brandName']}");
             }
           },
         ),

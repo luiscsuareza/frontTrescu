@@ -1,9 +1,11 @@
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'dart:convert';
 import '../util/const.dart';
 import 'obtainData.dart';
 
-Future<http.Response> createReceiver(String dateTime, String email, String fullName, String message, String phone) async {
+Future<void> createReceiver(DateTime dateTime, String email, String fullName,
+    String message, String phone, bool checked) async {
   await readInfoUser();
   final http.Response response = await http.post(
     Uri.parse(Constants.hostBackend + "/Trescubos/api/receivers"),
@@ -22,7 +24,10 @@ Future<http.Response> createReceiver(String dateTime, String email, String fullN
     },
     body: jsonEncode(<String, String>{
       //aca toca reemplazar los datos que estan quemados
-      "dateShipping": dateTime,
+      if (checked)
+        "dateShipping": DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            .format(dateTime)
+            .toString(),
       "email": email,
       "fullName": fullName,
       "message": message,
@@ -32,11 +37,13 @@ Future<http.Response> createReceiver(String dateTime, String email, String fullN
 
   if (response.statusCode == 200) {
     //Aca que hacemos en caso de tener 200 la validacion es exitosa y continuamos
-    var responseJson = json.decode(response.body)[0]["id"];
+    final responseJson = json.decode(response.body)["id"];
+    await Constants().setReceiver(double.parse(responseJson.toString()));
+    await readInfoUser();
     //final responseJson = json.decode(response.body);
     //brandsList = responseJson;
-    //print("Json de respuesta de Marcas: "+responseJson.toString());
-    return responseJson;
+    //print("Json de respuesta de Receiver: "+responseJson.toString());
+    //return responseJson;
   } else {
     print(response.body);
     throw Exception('Failed to create');

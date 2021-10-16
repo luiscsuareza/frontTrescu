@@ -3,7 +3,8 @@ import 'dart:convert';
 import '../util/const.dart';
 import 'obtainData.dart';
 
-Future<http.Response> createTransaction(String amount, String brand, String receiver, String description) async {
+Future<void> createTransaction(
+    String amount, String brand, String receiver, String description) async {
   await readInfoUser();
   final http.Response response = await http.post(
     Uri.parse(Constants.hostBackend + "/Trescubos/api/transactions"),
@@ -20,24 +21,24 @@ Future<http.Response> createTransaction(String amount, String brand, String rece
       'Email': userName,
       'Password': password,
     },
-    body: jsonEncode(<String, String>{
+    body: jsonEncode(<String, dynamic>{
       //aca toca reemplazar los datos que estan quemados
       "amount": amount,
-      "currencyId": "{id: $currency}",
-      "userId": "{id: $userId}",
-      "brandId": "{id: $brand}",
-      "receiverId": "{id: $receiver}",
+      "currencyId": jsonEncode(<String, String>{"id": currency}),
+      "userId": jsonEncode(<String, String>{"id": user_Id}),
+      "brandId": jsonEncode(<String, String>{"id": brand}),
+      "receiverId": jsonEncode(<String, String>{"id": receiver}),
       "description": description
     }),
   );
 
   if (response.statusCode == 200) {
     //Aca que hacemos en caso de tener 200 la validacion es exitosa y continuamos
-    var responseJson = json.decode(response.body)[0]["id"];
-    //final responseJson = json.decode(response.body);
+    //var responseJson = json.decode(response.body)[0]["id"];
+    final responseJson = json.decode(response.body);
     //brandsList = responseJson;
-    //print("Json de respuesta de Marcas: "+responseJson.toString());
-    return responseJson;
+    print("Json de respuesta de tx: " + responseJson.toString());
+    //return responseJson;
   } else {
     print(response.body);
     throw Exception('Failed to create');

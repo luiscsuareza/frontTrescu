@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-class Constants{
 
+class Constants {
   static String appName = "Trescubos";
-  static String hostBackend = "https://a939-186-118-23-104.ngrok.io";
+  static String hostBackend = "https://4744-186-118-23-104.ngrok.io";
 
   //Colors for theme
 //  Color(0xfffcfcff);
@@ -18,7 +18,7 @@ class Constants{
   static ThemeData lightTheme = ThemeData(
     backgroundColor: lightBG,
     primaryColor: lightPrimary,
-    accentColor:  lightAccent,
+    accentColor: lightAccent,
     cursorColor: lightAccent,
     scaffoldBackgroundColor: lightBG,
     appBarTheme: AppBarTheme(
@@ -78,7 +78,6 @@ class Constants{
     await prefs.setDouble('balance', balance);
   }
 
-
   Future<String> validateUsername() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String username = (prefs.getString('username'));
@@ -89,7 +88,6 @@ class Constants{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('username', username);
   }
-
 
   Future<String> validatePassword() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -122,5 +120,16 @@ class Constants{
   setCurrency(currency) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('currency', currency);
+  }
+
+  Future<double> validateReceiver() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    double receiver = (prefs.getDouble('receiver'));
+    return receiver;
+  }
+
+  setReceiver(double receiver) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('receiver', receiver);
   }
 }

@@ -219,13 +219,12 @@ class _LoginScreenState extends State<LoginScreen> {
           //
 
           SizedBox(height: 20.0),
-
         ],
       ),
     );
   }
 
-  Future<http.Response> validate(String email, String password) async {
+  Future<void> validate(String email, String password) async {
     final http.Response response = await http.get(
         Uri.parse(Constants.hostBackend +
             "/Trescubos/api/enterprise/users/" +
@@ -251,7 +250,8 @@ class _LoginScreenState extends State<LoginScreen> {
       //Aca que hacemos en caso de tener 200 la validacion es exitosa y continuamos
       final responseJson = json.decode(response.body)[0]["id"];
       final balance = json.decode(response.body)[0]["balance"];
-      final currency = json.decode(response.body)[0]["currencyId"]["id"].toString();
+      final currency =
+          json.decode(response.body)[0]["currencyId"]["id"].toString();
       //final responseJson = json.decode(response.body);
       //print("Este el el json de response exitoso: " + responseJson.toString());
       //print("Este el el json de response exitoso: " + balance.toString());
@@ -268,9 +268,20 @@ class _LoginScreenState extends State<LoginScreen> {
       _pushPage(context, MainScreen());
       //return responseJson;
     } else {
-      //throw Exception('Failed to Validate');
-      print(response.body);
-      return null;
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('No tiene permiso'),
+          content: const Text('Usuario no autorizado, acceso denegado'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      throw Exception('Failed to Validate');
     }
   }
 

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../screens/notifications.dart';
 import '../services/obtainData.dart';
 import '../util/comments.dart';
@@ -593,16 +596,18 @@ class _ProductDetailsState extends State<ProductDetails> {
           onPressed: () async {
             if (int.parse(balance.replaceAll(",00", "").replaceAll(".", "")) >=
                 int.parse(dropdownValue)) {
+              await createReceiver(
+                  dateTimeValue,
+                  _emailNameControl.text,
+                  _fullNameControl.text,
+                  _messageControl.text,
+                  _phoneNameControl.text,
+                  isChecked);
+              await readInfoUser();
               await createTransaction(
-                  this.dropdownValue,
+                  "-" + dropdownValue.toString(),
                   "${brandsList[widget.index]['id']}",
-                  createReceiver(
-                          this.dateTimeValue.toString(),
-                          this._emailNameControl.text,
-                          this._fullNameControl.text,
-                          this._messageControl.text,
-                          this._phoneNameControl.text)
-                      .toString(),
+                  receiver,
                   "Compra en " + "${brandsList[widget.index]['brandName']}");
             }
           },

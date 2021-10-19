@@ -6,7 +6,7 @@ import 'dart:convert';
 import '../util/const.dart';
 import 'obtainData.dart';
 
-Future<http.Response> createTransaction(
+Future<int> createTransaction(
     String amount, String brand, String receiver, String description) async {
   await readInfoUser();
 
@@ -57,7 +57,7 @@ Future<http.Response> createTransaction(
     //var responseJson = json.decode(response.body)[0]["id"];
     final responseJson = json.decode(response.statusCode.toString());
     //brandsList = responseJson;
-    print("Json de respuesta de tx: " + responseJson.toString());
+    //print("Json de respuesta de tx: " + responseJson.toString());
     return responseJson;
 
   } else {

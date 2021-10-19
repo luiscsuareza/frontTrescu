@@ -604,11 +604,43 @@ class _ProductDetailsState extends State<ProductDetails> {
                   _phoneNameControl.text,
                   isChecked);
               await readInfoUser();
-              await createTransaction(
-                  "-" + dropdownValue.toString(),
-                  "${brandsList[widget.index]['id']}",
-                  receiver,
-                  "Compra en " + "${brandsList[widget.index]['brandName']}");
+              //print("=======Respuesta de tx http=======");
+              if (await createTransaction(
+                      "-" + dropdownValue.toString(),
+                      "${brandsList[widget.index]['id']}",
+                      receiver,
+                      "Compra en " +
+                          "${brandsList[widget.index]['brandName']}") ==
+                  200) {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Transaccion exitosa'),
+                    content: const Text('Hemos registrado tu compra'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Transaccion fallida'),
+                    content: const Text('Ups lo sentimos, algo fallo'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              ;
             } else {
               showDialog<String>(
                 context: context,

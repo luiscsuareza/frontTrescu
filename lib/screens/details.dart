@@ -609,6 +609,20 @@ class _ProductDetailsState extends State<ProductDetails> {
                   "${brandsList[widget.index]['id']}",
                   receiver,
                   "Compra en " + "${brandsList[widget.index]['brandName']}");
+            } else {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Lo sentimo'),
+                  content: const Text('El monto excede tu saldo'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
             }
           },
         ),

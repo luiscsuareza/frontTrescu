@@ -45,10 +45,12 @@ class _ProductDetailsState extends State<ProductDetails> {
       int end =
           int.parse("${brandsList[widget.index]['values']}".split(",")[2]);
       //print("Inicio: "+start.toString()+" pivote: "+pivot.toString()+" final: "+end.toString());
+      List<String> value = [];
       for (var i = start; i <= end; i = i + pivot) {
-        values.add(i.toString());
+        value.add(i.toString());
         //print("Valor agregado: " + i.toString());
       }
+      values = value;
       //print("Camino: false");
     }
 

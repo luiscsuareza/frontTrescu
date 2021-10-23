@@ -25,9 +25,8 @@ Future<void> createReceiver(DateTime dateTime, String email, String fullName,
     body: jsonEncode(<String, String>{
       //aca toca reemplazar los datos que estan quemados
       if (checked)
-        "dateShipping": DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-            .format(dateTime)
-            .toString(),
+        "dateShipping": await DateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+            .parse(dateTime.toString()).toString().replaceAll(' ', 'T').replaceAll("000", "000Z"),
       "email": email,
       "fullName": fullName,
       "message": message,

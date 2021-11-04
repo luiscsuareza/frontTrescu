@@ -7,7 +7,7 @@ List<dynamic> categoriesList;
 Future<void> getCategories(String email, String password) async {
   final http.Response response = await http.get(
       Uri.parse(
-          Constants.hostBackend+"/Trescubos/api/categories"),
+          Constants.hostBackend+"/api/categories"),
       headers: <String, String>{
         "Access-Control-Allow-Origin":
         "*", // Required for CORS support to work

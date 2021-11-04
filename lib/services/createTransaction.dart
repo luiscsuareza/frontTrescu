@@ -32,7 +32,7 @@ Future<int> createTransaction(
   //print(bodyRequest);
 
   final http.Response response = await http.post(
-    Uri.parse(Constants.hostBackend + "/Trescubos/api/transactions"),
+    Uri.parse(Constants.hostBackend + "/api/transactions"),
     headers: <String, String>{
       "Access-Control-Allow-Origin": "*", // Required for CORS support to work
       "Access-Control-Allow-Credentials":

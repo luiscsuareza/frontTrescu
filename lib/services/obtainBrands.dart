@@ -9,7 +9,7 @@ Future<void> getBrands() async {
   await readInfoUser();
   final http.Response response = await http.get(
       Uri.parse(
-          Constants.hostBackend+"/Trescubos/api/brands/is/"+category),
+          Constants.hostBackend+"/api/brands/is/"+category),
       headers: <String, String>{
         "Access-Control-Allow-Origin":
         "*", // Required for CORS support to work

@@ -8,7 +8,7 @@ Future<void> createReceiver(DateTime dateTime, String email, String fullName,
     String message, String phone, bool checked) async {
   await readInfoUser();
   final http.Response response = await http.post(
-    Uri.parse(Constants.hostBackend + "/Trescubos/api/receivers"),
+    Uri.parse(Constants.hostBackend + "/api/receivers"),
     headers: <String, String>{
       "Access-Control-Allow-Origin": "*", // Required for CORS support to work
       "Access-Control-Allow-Credentials":

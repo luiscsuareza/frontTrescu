@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Constants {
   static String appName = "Trescubos";
-  static String hostBackend = "https://58bd-186-118-23-104.ngrok.io";
+  static String hostBackend = "http://ec2-3-14-125-59.us-east-2.compute.amazonaws.com:8080/Trescubos-1.0";
 
   //Colors for theme
 //  Color(0xfffcfcff);

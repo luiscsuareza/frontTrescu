@@ -227,7 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> validate(String email, String password) async {
     final http.Response response = await http.get(
         Uri.parse(Constants.hostBackend +
-            "/Trescubos/api/enterprise/users/" +
+            "/api/enterprise/users/" +
             email +
             "/" +
             password),

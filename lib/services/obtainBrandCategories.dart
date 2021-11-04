@@ -11,7 +11,7 @@ List<dynamic> brandCategoriesList;
 Future<void> getBrandCategories() async {
   final http.Response response = await http.get(
       Uri.parse(
-          Constants.hostBackend+"/Trescubos/api/brand/categories"),
+          Constants.hostBackend+"/api/brand/categories"),
       headers: <String, String>{
         "Access-Control-Allow-Origin":
         "*", // Required for CORS support to work
